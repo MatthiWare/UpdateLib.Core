@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MatthiWare.CommandLineParser" Version="0.2.4" />
   </ItemGroup>
 
