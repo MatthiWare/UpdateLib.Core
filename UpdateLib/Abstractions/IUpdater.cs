@@ -7,6 +7,6 @@ namespace UpdateLib.Abstractions
     interface IUpdater
     {
         Task<CheckForUpdatesResult> CheckForUpdatesAsync();
-        CheckForUpdatesResult CheckForUpdates();
+        Task InitializeAsync();
     }
 }
