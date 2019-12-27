@@ -3,7 +3,7 @@ using UpdateLib.Core;
 using UpdateLib.Core.Enums;
 using Xunit;
 
-namespace UpdateLib.Tests.Common
+namespace UpdateLib.Tests.Core
 {
     public class UpdateVersionTests
     {
