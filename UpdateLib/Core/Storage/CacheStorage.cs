@@ -48,6 +48,9 @@ namespace UpdateLib.Core.Storage
             using (var stream = fs.File.OpenWrite(cachePath))
             using (var writer = new StreamWriter(stream))
             {
+                // truncate
+                stream.SetLength(0);
+
                 var contents = JsonConvert.SerializeObject(file);
                 await writer.WriteAsync(contents);
             }
