@@ -6,6 +6,7 @@ namespace UpdateLib.Abstractions
 {
     interface IUpdater
     {
+        bool IsInitialized { get; }
         Task<CheckForUpdatesResult> CheckForUpdatesAsync();
         Task InitializeAsync();
     }

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using UpdateLib.Core.Storage.Files;
 
 namespace UpdateLib.Abstractions
 {
-    interface ICacheManager
+    public interface ICacheManager
     {
-        Task UpdateCacheAsync();
+        Task<HashCacheFile> UpdateCacheAsync();
     }
 }

@@ -1,27 +1,39 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using UpdateLib.Abstractions;
 using UpdateLib.Abstractions.Storage;
 using UpdateLib.Core;
+using UpdateLib.Core.Storage.Files;
 
 namespace UpdateLib
 {
     public class Updater : IUpdater
     {
-        private readonly ICacheStorage cacheStorage;
+        private readonly ICacheManager cacheManager;
+        private HashCacheFile cacheFile;
 
-        public Updater(ICacheStorage cacheStorage)
+        public bool IsInitialized { get; private set; }
+
+        public Updater(ICacheManager cacheManager)
         {
-            this.cacheStorage = cacheStorage ?? throw new System.ArgumentNullException(nameof(cacheStorage));
+            this.cacheManager = cacheManager ?? throw new ArgumentNullException(nameof(cacheManager));
         }
 
-        public Task<CheckForUpdatesResult> CheckForUpdatesAsync()
+        public async Task<CheckForUpdatesResult> CheckForUpdatesAsync()
         {
-            throw new System.NotImplementedException();
+            if (!IsInitialized)
+                await InitializeAsync();
+
+            IHttpClientFactory factory;
         }
 
         public async Task InitializeAsync()
         {
-            var cache = await cacheStorage.LoadAsync();
+            cacheFile = await cacheManager.UpdateCacheAsync();
+
+            IsInitialized = true;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace UpdateLib.Core
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task UpdateCacheAsync()
+        public async Task<HashCacheFile> UpdateCacheAsync()
         {
             HashCacheFile file = null;
 
@@ -46,12 +46,14 @@ namespace UpdateLib.Core
             if (file == null)
             {
                 file = await CreateNewHashCacheFileAsync();
-                return;
+                return file;
             }
 
             await UpdateExistingFiles(file);
 
             await cacheStorage.SaveAsync(file);
+
+            return file;
         }
 
         private async Task UpdateExistingFiles(HashCacheFile cacheFile)
