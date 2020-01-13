@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using UpdateLib.Abstractions;
-using UpdateLib.Abstractions.Storage;
 using UpdateLib.Core;
 using UpdateLib.Core.Storage.Files;
 
@@ -26,7 +23,7 @@ namespace UpdateLib
             if (!IsInitialized)
                 await InitializeAsync();
 
-            IHttpClientFactory factory;
+            return null;
         }
 
         public async Task InitializeAsync()
