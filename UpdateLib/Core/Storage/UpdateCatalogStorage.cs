@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
@@ -12,6 +13,10 @@ namespace UpdateLib.Core.Storage
     {
         private readonly IFileSystem fs;
         private readonly string catalogFilePath;
+
+        public bool Exists => fs.File.Exists(catalogFilePath);
+
+        public DateTime LastWriteTime => fs.File.GetLastWriteTimeUtc(catalogFilePath);
 
         public UpdateCatalogStorage(IFileSystem fs)
         {

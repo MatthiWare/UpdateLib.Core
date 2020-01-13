@@ -17,6 +17,8 @@ namespace UpdateLib.Core.Storage
         private readonly IFileSystem fs;
         private readonly string cachePath;
 
+        public bool CacheExists => fs.File.Exists(cachePath);
+
         public CacheStorage(IFileSystem storage)
         {
             this.fs = storage ?? throw new ArgumentNullException(nameof(storage));
@@ -36,6 +38,8 @@ namespace UpdateLib.Core.Storage
 
         public async Task<HashCacheFile> LoadAsync()
         {
+            if (!CacheExists) throw new FileNotFoundException("File doesn't exist", cachePath);
+
             using (var reader = fs.File.OpenText(cachePath))
             {
                 var contents = await reader.ReadToEndAsync();

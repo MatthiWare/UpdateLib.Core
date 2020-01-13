@@ -30,13 +30,20 @@ namespace UpdateLib.Core
         {
             HashCacheFile file = null;
 
-            try
+            if (cacheStorage.CacheExists)
             {
-                file = await cacheStorage.LoadAsync();
+                try
+                {
+                    file = await cacheStorage.LoadAsync();
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "Unable to load cache from storage");
+                }
             }
-            catch (Exception e)
+            else
             {
-                logger.LogError(e, "Unable to load cache from storage");
+                logger.LogDebug($"Cache file doesn't exist");
             }
 
             files = fs.DirectoryInfo.FromDirectoryName(".").GetFiles("*", SearchOption.AllDirectories).Where(f => !f.FullName.Contains(".old.tmp"));

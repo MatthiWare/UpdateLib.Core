@@ -6,6 +6,7 @@ namespace UpdateLib.Abstractions.Storage
 {
     public interface ICacheStorage
     {
+        bool CacheExists { get; }
         Task SaveAsync(HashCacheFile file);
         Task<HashCacheFile> LoadAsync();
     }
