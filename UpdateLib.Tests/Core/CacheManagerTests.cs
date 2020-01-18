@@ -34,7 +34,7 @@ namespace UpdateLib.Tests.Core
         [Fact]
         public async Task OldCacheEntriesAreDeleted()
         {
-            var fs = new MockFileSystem();
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>(), "C:\\app");
             var cache = new CacheStorage(fs);
 
             var file = new HashCacheFile();

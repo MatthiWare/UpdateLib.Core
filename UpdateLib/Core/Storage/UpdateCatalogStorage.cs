@@ -30,7 +30,7 @@ namespace UpdateLib.Core.Storage
             // Use DoNotVerify in case LocalApplicationData doesn’t exist.
             string path = fs.Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.DoNotVerify), "UpdateLib", "Cache", "UpdateCatalogus.json");
             // Ensure the directory and all its parents exist.
-            fs.Directory.CreateDirectory(path);
+            fs.Directory.CreateDirectory(fs.Path.GetDirectoryName(path));
 
             return path;
         }
