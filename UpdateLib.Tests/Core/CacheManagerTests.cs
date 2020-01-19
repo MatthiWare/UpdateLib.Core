@@ -87,11 +87,10 @@ namespace UpdateLib.Tests.Core
         public async Task CorruptCacheFileGetsRestored()
         {
             var fs = new MockFileSystem();
-            string path = fs.Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.DoNotVerify), "UpdateLib", "Cache", "FileCache.json");
-
-            fs.AddFile(path, new MockFileData("blabla")); // not valid json
-
             var cache = new CacheStorage(fs);
+
+            fs.AddFile(cache.FileInfo.FullName, new MockFileData("blabla")); // not valid json
+
             var manager = CreateCacheManager(fs, cache);
 
             await manager.UpdateCacheAsync();

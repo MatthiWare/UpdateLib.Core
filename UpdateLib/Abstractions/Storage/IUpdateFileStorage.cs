@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
-using UpdateLib.Core.Storage.Files;
+﻿using UpdateLib.Core.Storage.Files;
 
 namespace UpdateLib.Abstractions.Storage
 {
-    interface IUpdateFileStorage
+    interface IUpdateFileStorage : IStorage<UpdateFile>
     {
-        Task SaveAsync(UpdateFile file);
-        Task<UpdateFile> LoadAsync();
     }
 }

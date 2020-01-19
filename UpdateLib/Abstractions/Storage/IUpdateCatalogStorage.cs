@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
 using UpdateLib.Core.Storage.Files;
 
 namespace UpdateLib.Abstractions.Storage
 {
-    public interface IUpdateCatalogStorage
+    public interface IUpdateCatalogStorage : IStorage<UpdateCatalogFile>
     {
         bool Exists { get; }
         DateTime LastWriteTime { get; }
-        Task<UpdateCatalogFile> LoadAsync();
-        Task SaveAsync(UpdateCatalogFile file);
     }
 }

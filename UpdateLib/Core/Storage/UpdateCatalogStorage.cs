@@ -1,60 +1,21 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.IO;
+﻿using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using UpdateLib.Abstractions.Storage;
 using UpdateLib.Core.Storage.Files;
-using static System.Environment;
 
 namespace UpdateLib.Core.Storage
 {
-    public class UpdateCatalogStorage : IUpdateCatalogStorage
+    public class UpdateCatalogStorage : BaseStorage<UpdateCatalogFile>, IUpdateCatalogStorage
     {
-        private readonly IFileSystem fs;
-        private readonly string catalogFilePath;
+        private const string FileName = "UpdateCatalogus.json";
 
-        public bool Exists => fs.File.Exists(catalogFilePath);
+        public bool Exists => FileInfo.Exists;
 
-        public DateTime LastWriteTime => fs.File.GetLastWriteTimeUtc(catalogFilePath);
+        public DateTime LastWriteTime => FileInfo.LastWriteTimeUtc;
 
         public UpdateCatalogStorage(IFileSystem fs)
+            : base(fs, "UpdateLib", "Cache", FileName)
         {
-            this.fs = fs ?? throw new System.ArgumentNullException(nameof(fs));
-
-            catalogFilePath = GetFilePathAndEnsureCreated();
-        }
-
-        private string GetFilePathAndEnsureCreated()
-        {
-            // Use DoNotVerify in case LocalApplicationData doesn’t exist.
-            string path = fs.Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.DoNotVerify), "UpdateLib", "Cache", "UpdateCatalogus.json");
-            // Ensure the directory and all its parents exist.
-            fs.Directory.CreateDirectory(fs.Path.GetDirectoryName(path));
-
-            return path;
-        }
-
-        public async Task<UpdateCatalogFile> LoadAsync()
-        {
-            using (var reader = fs.File.OpenText(catalogFilePath))
-            {
-                var contents = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject<UpdateCatalogFile>(contents);
-            }
-        }
-
-        public async Task SaveAsync(UpdateCatalogFile file)
-        {
-            using (var stream = fs.File.OpenWrite(catalogFilePath))
-            using (var writer = new StreamWriter(stream))
-            {
-                // truncate
-                stream.SetLength(0);
-
-                var contents = JsonConvert.SerializeObject(file);
-                await writer.WriteAsync(contents);
-            }
         }
     }
 }

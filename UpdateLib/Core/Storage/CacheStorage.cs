@@ -1,63 +1,19 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.IO.Abstractions;
-using System.Threading.Tasks;
+﻿using System.IO.Abstractions;
 using UpdateLib.Abstractions.Storage;
 using UpdateLib.Core.Storage.Files;
-using static System.Environment;
 
 namespace UpdateLib.Core.Storage
 {
-    public class CacheStorage : ICacheStorage
+    public class CacheStorage : BaseStorage<HashCacheFile>, ICacheStorage
     {
         private const string CachePathName = "Cache";
         private const string CacheFileName = "FileCache.json";
 
-        private readonly IFileSystem fs;
-        private readonly string cachePath;
-
-        public bool CacheExists => fs.File.Exists(cachePath);
+        public bool CacheExists => FileInfo.Exists;
 
         public CacheStorage(IFileSystem storage)
+            : base(storage, "UpdateLib", CachePathName, CacheFileName)
         {
-            this.fs = storage ?? throw new ArgumentNullException(nameof(storage));
-
-            cachePath = GetFilePathAndEnsureCreated();
-        }
-
-        private string GetFilePathAndEnsureCreated()
-        {
-            // Use DoNotVerify in case LocalApplicationData doesn’t exist.
-            string path = fs.Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.DoNotVerify), "UpdateLib", CachePathName, CacheFileName);
-            // Ensure the directory and all its parents exist.
-            fs.Directory.CreateDirectory(fs.Path.GetDirectoryName(path));
-
-            return path;
-        }
-
-        public async Task<HashCacheFile> LoadAsync()
-        {
-            if (!CacheExists) throw new FileNotFoundException("File doesn't exist", cachePath);
-
-            using (var reader = fs.File.OpenText(cachePath))
-            {
-                var contents = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject<HashCacheFile>(contents);
-            }
-        }
-
-        public async Task SaveAsync(HashCacheFile file)
-        {
-            using (var stream = fs.File.OpenWrite(cachePath))
-            using (var writer = new StreamWriter(stream))
-            {
-                // truncate
-                stream.SetLength(0);
-
-                var contents = JsonConvert.SerializeObject(file);
-                await writer.WriteAsync(contents);
-            }
         }
     }
 }
