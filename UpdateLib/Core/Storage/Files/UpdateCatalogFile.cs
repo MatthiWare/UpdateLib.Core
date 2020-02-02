@@ -16,17 +16,5 @@ namespace UpdateLib.Core.Storage.Files
         /// Download Url's 
         /// </summary>
         public List<string> DownloadUrls { get; private set; } = new List<string>();
-
-        /// <summary>
-        /// Gets the best update for the current version. 
-        /// </summary>
-        /// <param name="currentVersion">The currect application version</param>
-        /// <returns><see cref="UpdateInfo"/></returns>
-        public UpdateInfo GetLatestUpdateForVersion(UpdateVersion currentVersion)
-        {
-            if (currentVersion == null) throw new ArgumentNullException(nameof(currentVersion));
-
-            return Catalog.OrderBy(c => c).Where(c => currentVersion < c.Version && ((c.IsPatch && c.BasedOnVersion == currentVersion) || !c.IsPatch)).FirstOrDefault();
-        }
     }
 }

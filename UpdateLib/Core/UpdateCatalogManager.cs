@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UpdateLib.Abstractions;
 using UpdateLib.Abstractions.Common.IO;
 using UpdateLib.Abstractions.Storage;
+using UpdateLib.Core.Common;
 using UpdateLib.Core.Storage.Files;
 
 namespace UpdateLib.Core
@@ -53,6 +55,19 @@ namespace UpdateLib.Core
             await storage.SaveAsync(file);
 
             return file;
+        }
+
+        /// <summary>
+        /// Gets the best update for the current version. 
+        /// </summary>
+        /// <param name="currentVersion">The currect application version</param>
+        /// <returns><see cref="UpdateInfo"/></returns>
+        public UpdateInfo GetLatestUpdateForVersion(UpdateVersion currentVersion, UpdateCatalogFile catalogFile)
+        {
+            if (currentVersion is null) throw new ArgumentNullException(nameof(currentVersion));
+            if (catalogFile is null) throw new ArgumentNullException(nameof(catalogFile));
+
+            return catalogFile.Catalog.OrderBy(c => c).Where(c => currentVersion < c.Version && ((c.IsPatch && c.BasedOnVersion == currentVersion) || !c.IsPatch)).FirstOrDefault();
         }
     }
 }
