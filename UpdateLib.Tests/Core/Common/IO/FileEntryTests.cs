@@ -16,11 +16,9 @@ namespace UpdateLib.Tests.Core.Common.IO
 
             subFolder.Add(file);
 
-            string outputSource = "sub/myfile.txt";
             string outputDest = "%root%\\sub\\myfile.txt";
 
-            Assert.Equal(outputSource, file.SourceLocation);
-            Assert.Equal(outputDest, file.DestinationLocation);
+            Assert.Equal(outputDest, file.Path);
         }
     }
 }

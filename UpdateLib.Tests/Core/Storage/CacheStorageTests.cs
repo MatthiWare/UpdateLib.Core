@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UpdateLib.Core.Storage;
 using UpdateLib.Core.Storage.Files;
 using Xunit;
-using static System.Environment;
 
 namespace UpdateLib.Tests.Core.Storage
 {
